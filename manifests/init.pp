@@ -29,6 +29,14 @@ class lsyncd (
     require => Package['lsyncd'],
   }
 
+  if defined(Class['csync2']) {
+    if $csync2::csync2_confdir {
+      $csync2_confdir = $csync2::csync2_confdir      
+    }
+  } else {
+    $csync2_confdir = '/etc/csync2'
+  }
+
   concat::fragment{ "lsyncd_header":
     target  => $conf_file,
     content => template('lsyncd/lsyncd_csync2_header.erb'),

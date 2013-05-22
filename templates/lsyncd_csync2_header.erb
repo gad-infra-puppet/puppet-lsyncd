@@ -81,7 +81,7 @@ initSync = {
             error("Missing 'syncid' parameter.", 4)
         end
         local c = "csync2_" .. config.syncid .. ".cfg"
-        local f, err = io.open("/etc/csync2/" .. c, "r")
+        local f, err = io.open("<%= csync2_confdir %>/" .. c, "r")
         if not f then
             error("Invalid 'syncid' parameter: " .. err, 4)
         end
