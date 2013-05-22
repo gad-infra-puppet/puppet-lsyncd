@@ -1,3 +1,7 @@
 <% directories.each do |dir| -%>
+  <%- if directory_root -%>
+    ["<%=directory_root%>/<%= dir %>"] = "<%= title %>",
+  <%- else -%>
     ["<%= dir %>"] = "<%= title %>",
+  <%- end -%>
 <% end -%>
