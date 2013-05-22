@@ -6,11 +6,10 @@
 #  class { 'lsyncd': config_source => 'puppet:///modules/example/lsyncd.conf' }
 #
 class lsyncd (
-  $config_source  = undef,
-  $config_content = undef,
   $logdir_owner   = 'root',
   $logdir_group   = 'root',
-  $logdir_mode    = '0755'
+  $logdir_mode    = '0755',
+  $conf_file      = '/etc/lsyncd.conf'
 ) {
 
   package { 'lsyncd': ensure => installed }
@@ -22,14 +21,24 @@ class lsyncd (
     require   => Package['lsyncd'],
   }
 
-  file { '/etc/lsyncd.conf':
-    source  => $config_source,
-    content => $config_content,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+  concat { $conf_file :
+    owner => root,
+    group => root,
+    mode  => '0644',
     notify  => Service['lsyncd'],
     require => Package['lsyncd'],
+  }
+
+  concat::fragment{ "lsyncd_header":
+    target  => $conf_file,
+    content => template('lsyncd/lsyncd_csync2_header.erb'),
+    order   => 01,
+  }
+
+  concat::fragment{ "lsyncd_footer":
+    target => $conf_file,
+    content => template('lsyncd/lsyncd_csync2_footer.erb'),
+    order   => 15,
   }
 
   # As of 2.1.4-3.el6 the rpm package doesn't include this directory
