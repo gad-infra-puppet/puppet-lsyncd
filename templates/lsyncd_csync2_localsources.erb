@@ -1,4 +1,4 @@
-<% directories.each do |dir| -%>
+<% directories.sort.each do |dir| -%>
   <%- if directory_root -%>
     ["<%=directory_root%>/<%= dir %>"] = "<%= title %>",
   <%- else -%>
