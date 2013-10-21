@@ -1,6 +1,21 @@
 }
 
 for key, value in pairs(sources) do
-    sync {initSync, source=key, syncid=value}
+    if key:find('mobile_banner_ads') then
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value, 
+        delete=false
+      }
+    else
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value,
+        exclude={"/00**", "/01**"}, 
+        delete=false
+      }
+    end
 end
 
