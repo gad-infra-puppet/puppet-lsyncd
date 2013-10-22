@@ -1,6 +1,36 @@
 }
 
 for key, value in pairs(sources) do
-    sync {initSync, source=key, syncid=value}
+    if key:find('public/mobile_banner_ads') then
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value, 
+        excludeFrom="/etc/lsyncd/mobile_banner_ads.exclude",
+        delete=false
+      }
+    elseif key:find('public/banner_ads') then
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value, 
+        excludeFrom="/etc/lsyncd/banner_ads.exclude",
+        delete=false
+      }
+    elseif key:find('public/sp_banner_ad_images') then
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value, 
+        excludeFrom="/etc/lsyncd/sp_banner_ad_images.exclude",
+        delete=false
+      }
+    else
+      sync {
+        initSync, 
+        source=key, 
+        syncid=value,
+        delete=false
+      }
+    end
 end
-
