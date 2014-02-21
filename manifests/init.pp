@@ -6,17 +6,26 @@
 #  class { 'lsyncd': config_source => 'puppet:///modules/example/lsyncd.conf' }
 #
 class lsyncd (
+  $ensure         = present,
   $logdir_owner   = 'root',
   $logdir_group   = 'root',
   $logdir_mode    = '0755',
-  $conf_file      = '/etc/lsyncd.conf'
+  $conf_file      = '/etc/lsyncd.conf',
 ) {
 
   package { 'lsyncd': ensure => installed }
 
+  if ($ensure == 'present') {
+    $run_service = true
+    $service_state = 'running'
+  } else {
+    $run_service = false
+    $service_state = 'stopped'
+  }
+
   service { 'lsyncd':
-    enable    => true,
-    ensure    => running,
+    enable    => $run_service,
+    ensure    => $service_state,
     hasstatus => true,
     require   => Package['lsyncd'],
   }
